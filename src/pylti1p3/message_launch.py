@@ -2,10 +2,17 @@ import base64
 import hashlib
 import json
 import typing as t
+from typing import TYPE_CHECKING, Any
 import uuid
 from abc import ABCMeta, abstractmethod
 
-import jwt  # type: ignore
+import jwt
+
+if TYPE_CHECKING:
+    from jwt.types import Options as JwtOptions
+else:
+    JwtOptions = dict[str, Any]
+
 import requests
 import typing_extensions as te
 from jwcrypto.jwk import JWK  # type: ignore
@@ -195,7 +202,7 @@ class MessageLaunch(t.Generic[REQ, TCONF, SES, COOK]):
     _session_service: SES
     _cookie_service: COOK
     _jwt: TJwtData
-    _jwt_verify_options: t.Dict[str, bool]
+    _jwt_verify_options: JwtOptions
     _registration: t.Optional[Registration]
     _launch_id: str
     _validated: bool = False
@@ -259,7 +266,7 @@ class MessageLaunch(t.Generic[REQ, TCONF, SES, COOK]):
         self._jwt = val
         return self
 
-    def set_jwt_verify_options(self, val: t.Dict[str, bool]) -> "MessageLaunch":
+    def set_jwt_verify_options(self, val: JwtOptions) -> "MessageLaunch":
         self._jwt_verify_options = val
         return self
 
