@@ -151,7 +151,9 @@ class DeepLinkBase(TestLinkBase):
             uuid_val="462a941bbf6a4356afa7"
         )
 
-        launch_request = self._get_request(login_request=login_request, login_response=login_response)
+        launch_request = self._get_request(
+            login_request=login_request, login_response=login_response
+        )
 
         validated_message_launch = self._launch(
             launch_request, tool_conf, force_validation=True

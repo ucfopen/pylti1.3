@@ -1,7 +1,12 @@
 import unittest
 from pylti1p3.roles import (
-    StudentRole, TeacherRole, StaffRole,
-    TeachingAssistantRole, DesignerRole, ObserverRole, TransientRole,
+    StudentRole,
+    TeacherRole,
+    StaffRole,
+    TeachingAssistantRole,
+    DesignerRole,
+    ObserverRole,
+    TransientRole,
 )
 
 MEMBERSHIP = "http://purl.imsglobal.org/vocab/lis/v2/membership#{}"
@@ -25,7 +30,9 @@ class TestStudentRole(unittest.TestCase):
         self.assertTrue(StudentRole(jwt_body(INSTITUTION.format("Student"))).check())
 
     def test_institution_prospective_student_is_student(self):
-        self.assertTrue(StudentRole(jwt_body(INSTITUTION.format("ProspectiveStudent"))).check())
+        self.assertTrue(
+            StudentRole(jwt_body(INSTITUTION.format("ProspectiveStudent"))).check()
+        )
 
     def test_teacher_context_role_is_not_student(self):
         self.assertFalse(StudentRole(jwt_body(MEMBERSHIP.format("Instructor"))).check())
@@ -39,7 +46,9 @@ class TestTeacherRole(unittest.TestCase):
         self.assertTrue(TeacherRole(jwt_body(MEMBERSHIP.format("Instructor"))).check())
 
     def test_context_administrator_is_teacher(self):
-        self.assertTrue(TeacherRole(jwt_body(MEMBERSHIP.format("Administrator"))).check())
+        self.assertTrue(
+            TeacherRole(jwt_body(MEMBERSHIP.format("Administrator"))).check()
+        )
 
     def test_student_context_role_is_not_teacher(self):
         self.assertFalse(TeacherRole(jwt_body(MEMBERSHIP.format("Learner"))).check())
@@ -80,7 +89,9 @@ class TestContextRolesPrecedence(unittest.TestCase):
     def test_without_context_roles_institution_instructor_is_teacher(self):
         # When there are no context roles, institution roles are checked normally.
         body = jwt_body(INSTITUTION.format("Instructor"))
-        self.assertFalse(TeacherRole(body).check())  # TeacherRole has no institution roles
+        self.assertFalse(
+            TeacherRole(body).check()
+        )  # TeacherRole has no institution roles
 
     def test_staff_institution_without_context_roles(self):
         body = jwt_body(INSTITUTION.format("Instructor"))
@@ -90,7 +101,9 @@ class TestContextRolesPrecedence(unittest.TestCase):
 class TestOtherRoles(unittest.TestCase):
     def test_teaching_assistant(self):
         self.assertTrue(
-            TeachingAssistantRole(jwt_body(MEMBERSHIP.format("TeachingAssistant"))).check()
+            TeachingAssistantRole(
+                jwt_body(MEMBERSHIP.format("TeachingAssistant"))
+            ).check()
         )
 
     def test_designer(self):
@@ -99,14 +112,10 @@ class TestOtherRoles(unittest.TestCase):
         )
 
     def test_observer(self):
-        self.assertTrue(
-            ObserverRole(jwt_body(MEMBERSHIP.format("Mentor"))).check()
-        )
+        self.assertTrue(ObserverRole(jwt_body(MEMBERSHIP.format("Mentor"))).check())
 
     def test_transient(self):
-        self.assertTrue(
-            TransientRole(jwt_body(MEMBERSHIP.format("Transient"))).check()
-        )
+        self.assertTrue(TransientRole(jwt_body(MEMBERSHIP.format("Transient"))).check())
 
     def test_unknown_role_string_returns_false(self):
         body = jwt_body("urn:some-unknown-role")

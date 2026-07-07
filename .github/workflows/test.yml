@@ -19,6 +19,7 @@ jobs:
       - run: pylint --rcfile=pylintrc pylti1p3 tests
       - run: mypy src
       - run: black src --check --diff --extend-exclude ".*/migrations/.*"
+      - run: black tests --check --diff
 
       - name: Run tests
         env:
