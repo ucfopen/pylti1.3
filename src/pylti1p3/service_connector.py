@@ -44,9 +44,19 @@ class ServiceConnector:
             self._requests_session.headers["User-Agent"] = REQUESTS_USER_AGENT
 
     def _scope_key(self, scopes: t.Iterable[str]) -> str:
+        """
+        A single issuer can register several client_ids, and the access token is created per
+        client_id. Including client_id here keeps the token cache from serving one client's token
+        to another when they share an issuer and request the same scopes.
+
+        See: https://www.imsglobal.org/spec/lti/v1p3#client_id-login-parameter
+        """
         issuer = self._registration.get_issuer()
+        client_id = self._registration.get_client_id()
         scopes_str: str = "|".join(
-            ([issuer] if issuer is not None else []) + sorted(scopes)
+            ([issuer] if issuer is not None else [])
+            + ([client_id] if client_id is not None else [])
+            + sorted(scopes)
         )
         scopes_bytes = scopes_str.encode("utf-8")
 
