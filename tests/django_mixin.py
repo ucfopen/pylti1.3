@@ -55,13 +55,15 @@ class DjangoMixin:
         with patch("django.shortcuts.redirect") as mock_redirect:
             from pylti1p3.contrib.django import DjangoOIDCLogin
 
-            with patch.object(
-                DjangoOIDCLogin, "_get_uuid", autospec=True
-            ) as get_uuid, patch.object(
-                DjangoOIDCLogin, "_generate_nonce", autospec=True
-            ) as generate_nonce, patch.object(
-                DjangoOIDCLogin, "get_response", autospec=True
-            ) as get_response:
+            with (
+                patch.object(DjangoOIDCLogin, "_get_uuid", autospec=True) as get_uuid,
+                patch.object(
+                    DjangoOIDCLogin, "_generate_nonce", autospec=True
+                ) as generate_nonce,
+                patch.object(
+                    DjangoOIDCLogin, "get_response", autospec=True
+                ) as get_response,
+            ):
                 get_uuid.side_effect = (
                     lambda x: uuid_val
                 )  # pylint: disable=unnecessary-lambda
@@ -79,7 +81,9 @@ class DjangoMixin:
                 launch_url = "http://lti.django.test/launch/"
 
                 if enable_check_cookies:
-                    response_html = oidc_login.enable_check_cookies().redirect(launch_url)
+                    response_html = oidc_login.enable_check_cookies().redirect(
+                        launch_url
+                    )
                     self.assertTrue('<script type="text/javascript">' in response_html)
                     self.assertTrue("<body>" in response_html)
                     self.assertTrue(

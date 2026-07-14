@@ -13,14 +13,16 @@ class TestLineItemInit(unittest.TestCase):
         self.assertIsNone(li.get_tag())
 
     def test_init_from_dict(self):
-        li = LineItem({
-            "id": "http://lms.example.com/lineitems/1",
-            "scoreMaximum": 100,
-            "label": "Final Exam",
-            "tag": "exam",
-            "resourceId": "res-001",
-            "resourceLinkId": "link-001",
-        })
+        li = LineItem(
+            {
+                "id": "http://lms.example.com/lineitems/1",
+                "scoreMaximum": 100,
+                "label": "Final Exam",
+                "tag": "exam",
+                "resourceId": "res-001",
+                "resourceLinkId": "link-001",
+            }
+        )
         self.assertEqual(li.get_id(), "http://lms.example.com/lineitems/1")
         self.assertEqual(li.get_score_maximum(), 100)
         self.assertEqual(li.get_label(), "Final Exam")

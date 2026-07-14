@@ -81,7 +81,11 @@ class TestGradeModel(unittest.TestCase):
         self.assertEqual(g.get_comment(), "Well done!")
 
     def test_activity_and_grading_progress(self):
-        g = Grade().set_activity_progress("Completed").set_grading_progress("FullyGraded")
+        g = (
+            Grade()
+            .set_activity_progress("Completed")
+            .set_grading_progress("FullyGraded")
+        )
         self.assertEqual(g.get_activity_progress(), "Completed")
         self.assertEqual(g.get_grading_progress(), "FullyGraded")
 
