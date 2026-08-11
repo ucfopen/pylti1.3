@@ -1,5 +1,6 @@
 import typing as t
 from .lineitem import LineItem
+from .exception import LtiException
 
 
 class DeepLinkResource:
@@ -102,7 +103,10 @@ class DeepLinkResource:
                 "html": self._html
             }
 
-        elif self._html and self._type == "html":
+        elif self._type == "html":
+            if self._html is None:
+                raise LtiException("DeepLinkResource of type 'html' has no defined HTML")
+
             res["html"] = self._html
 
         if self._icon_url:
